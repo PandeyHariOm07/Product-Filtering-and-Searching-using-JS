@@ -54,8 +54,8 @@ let products = {
 for(let i of products.data){
     //Create Card
     let card = document.createElement("div");
-    //Card Should Have Category
-    card.classList.add("card","i.category");
+    //Card Should Have Category and should remain hidden initially
+    card.classList.add("card",i.category,"hide");
     //image div
     let imgContainer = document.createElement("div");
     imgContainer.classList.add("image-container");
@@ -84,4 +84,60 @@ for(let i of products.data){
     document.getElementById("products").appendChild(card);
 }
 
+//parameter passed from button (Parameter same as Category)
+function filterProduct(value){
+    //Button class code
+    let buttons = document.querySelectorAll(".button-value");
+    buttons.forEach((button) => {
+        //check if value equals innerText
+        if(value.toUpperCase() == button.innerText.toUpperCase()){
+            button.classList.add("active");
+            
+        }
+        else{
+            button.classList.remove("active");
+        }
+    });
 
+    //Select All Cards
+    let elements = document.querySelectorAll(".card");
+    //loop through all card
+    elements.forEach((element) => {
+        //display All Cards on 'all' button click
+        if(value == "all"){
+            element.classList.remove("hide");
+        }
+        else{
+            //check if element contains category class
+            if(element.classList.contains(value)){
+                element.classList.remove("hide");
+            }
+            else{
+                //hide other elements
+                element.classList.add("hide");
+            }
+        }
+    });
+}
+
+//Search Button Click
+document.getElementById("search").addEventListener("click",() =>{
+    let searchInput  = document.getElementById("search-input").value;
+    let elements = document.querySelectorAll(".product-name");
+    let cards = document.querySelectorAll(".card");
+    //load through all elements
+    elements.forEach((element,index)=>{
+        //check if search input is in element
+        if(element.innerText.toUpperCase().includes(searchInput.toUpperCase())){
+            cards[index].classList.remove("hide");
+        }
+        else{
+            cards[index].classList.add("hide");
+        }
+    })
+});
+
+//Initially Display All Product
+window.onload = () => {
+    filterProduct("all");
+}
